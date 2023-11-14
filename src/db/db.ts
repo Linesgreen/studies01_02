@@ -22,7 +22,7 @@ export const db: DBtype = {
     }],
     blogs : [
         {
-            id: "string",
+            id: 'a',
             name: "string",
             description: "string",
             websiteUrl: "string"

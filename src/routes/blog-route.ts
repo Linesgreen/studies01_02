@@ -3,7 +3,8 @@ import {BlogRepository} from "../repositories/blog-repository";
 import {RequestWithParams} from "../types/common";
 import {BlogParams} from "../types/blog/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import {blogPostValidation, descriptionValidation, nameValidation} from "../validators/blogsValidator";
+import {blogPostValidation} from "../validators/blogsValidator";
+
 export const blogRoute = Router ({})
 
 blogRoute.get('/', (req:Request, res:Response ) => {
