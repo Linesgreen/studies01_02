@@ -19,7 +19,7 @@ blogRoute.get('/:id', authMiddleware,(req:RequestWithParams<BlogParams>, res:Res
     blog? res.send(blog) : res.sendStatus(404)
 })
 
-blogRoute.post('/', authMiddleware,blogPostValidation() ,(req:RequestWithBody<BlogCreateModel>, res:Response ) => {
+blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<BlogCreateModel>, res:Response ) => {
     let {name, description, websiteUrl} : PostBlogReqBody = req.body;
 
     const newBlog : BlogType = {
