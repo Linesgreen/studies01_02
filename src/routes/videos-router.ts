@@ -17,6 +17,7 @@ import {AvailableResolutions, VideoType} from "../types/videos/output";
 export const videoRouter = Router ({});
 export const RouterPaths = {
     videos : '/videos',
+    blogs: '/blogs',
     __test__ : '/testing/all-data'
 }
 function validationReqBody (reqParams : string, maxLength : number) : boolean {

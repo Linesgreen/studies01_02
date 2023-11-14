@@ -6,6 +6,7 @@ import {app} from "../../src"
 
 import {VideoCreateModel} from "../../src/model/VideosCreateModels";
 import {VideoType} from "../../src/types/videos/output";
+import {BlogCreateModel} from "../../src/types/blog/input";
 
 
 describe('/videos', () => {
@@ -31,17 +32,15 @@ describe('/videos', () => {
 
     // Пытаемся создать видео с неправильными данными
     it("should'nt create video with incorrect input data ",async () =>{
-        const videoData : VideoCreateModel  = {
-            title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
-            author: "aaaaaaaaaaaaaaaaaaa21",
-            availableResolutions: [
-                "616"
-            ],
-
+        const blogData : BlogCreateModel  = {
+            "name": "VladVladVladVladV",
+            "description": '',
+            "websiteUrl": "http://3PYcHT8Z-F4j8_HYlwvL.nWqTt3kQCc_I3BApixfMZd"
         };
+
         await request(app)
-            .post(RouterPaths.videos)
-            .send(videoData)
+            .post(RouterPaths.blogs)
+            .send(blogData)
             .expect(400, {
                 "errorsMessages": [
                     {

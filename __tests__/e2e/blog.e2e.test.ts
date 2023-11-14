@@ -18,7 +18,7 @@ describe('/videos', () => {
     // Проверяем что БД пустая
     it('should return 200 and empty []',async () =>{
        await request(app)
-            .get(RouterPaths.videos)
+            .get(RouterPaths.blogs)
             .expect(200, [])
     })
 
@@ -30,7 +30,7 @@ describe('/videos', () => {
     })
 
     // Пытаемся создать видео с неправильными данными
-    it("should'nt create video with incorrect input data ",async () =>{
+    it("should'nt create blog with incorrect input data ",async () =>{
         const videoData : VideoCreateModel  = {
             title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
             author: "aaaaaaaaaaaaaaaaaaa21",
