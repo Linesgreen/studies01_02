@@ -34,3 +34,4 @@ blogRoute.post('/', authMiddleware,blogPostValidation() ,(req:RequestWithBody<Bl
 
 })
 
+
