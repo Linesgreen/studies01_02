@@ -11,13 +11,13 @@ blogRoute.get('/', (req:Request, res:Response ) => {
     const blogs = BlogRepository.getAllBlogs()
     res.send(blogs)
 })
-blogRoute.get('/:id', authMiddleware, (req:RequestWithParams<BlogParams>, res:Response ) => {
+blogRoute.get('/:id', authMiddleware, blogPostValidation() ,(req:RequestWithParams<BlogParams>, res:Response ) => {
     const id  = req.params.id
     const blog = BlogRepository.getBlogById(id)
     blog? res.send(blog) : res.sendStatus(404)
 })
 
-blogRoute.post('/:id', authMiddleware,blogPostValidation() ,(req:RequestWithParams<BlogParams>, res:Response ) => {
+blogRoute.post('/', authMiddleware,blogPostValidation() ,(req:RequestWithParams<BlogParams>, res:Response ) => {
     const id  = req.params.id
     const blog = BlogRepository.getBlogById(id)
     blog? res.send(blog) : res.sendStatus(404)
