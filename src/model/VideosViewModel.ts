@@ -1,4 +1,5 @@
-import {AvailableResolutions} from "../routes/videos-router";
+import {AvailableResolutions} from "../types/videos/output";
+
 export type VideoViewModel = {
     id: number;
     title: string;
