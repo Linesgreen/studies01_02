@@ -21,7 +21,7 @@ blogRoute.get('/:id', authMiddleware,(req:RequestWithParams<BlogParams>, res:Res
 
 blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<BlogCreateModel>, res:Response ) => {
     let {name, description, websiteUrl} : PostBlogReqBody = req.body;
-    const newBlogId : string =BlogRepository.addBlog({name, description, websiteUrl})
+    const newBlogId : string = BlogRepository.addBlog({name, description, websiteUrl})
     res.status(201).send(BlogRepository.getBlogById(newBlogId))
 
 })
@@ -29,25 +29,9 @@ blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<Blo
 //////////////////////////////
 blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res:Response )=> {
     const id : string = req.params.id;
-    let {name, description, websiteUrl} : BlogUdateModel = req.body;
-
-    const blogIndex : number = db.blogs.findIndex(b => b.id === id)
-    const blog : BlogType = db.blogs[blogIndex]
-
-    if(!blog) {
-         res.sendStatus(404)
-        return
-    }
-
-    const updateItems : BlogType  = {
-        ...blog,
-        name,
-        description,
-        websiteUrl
-    }
-
-    db.blogs.splice(blogIndex,1,updateItems)
-    res.sendStatus(204)
+    const {name, description, websiteUrl} : BlogUdateModel = req.body;
+    const updateResult = BlogRepository.updateBlog({name, description, websiteUrl}, id)
+   return  updateResult ? res.sendStatus(204) : res.sendStatus(404)
 
 })
 

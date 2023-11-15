@@ -1,5 +1,5 @@
 import {db} from "../db/db";
-import {PostBlogReqBody} from "../types/blog/input";
+import {BlogUdateModel, PostBlogReqBody} from "../types/blog/input";
 import {BlogType} from "../types/blog/output";
 
 export class BlogRepository {
@@ -24,5 +24,21 @@ export class BlogRepository {
         }
         db.blogs.push(newBlog)
         return newBlog.id;
+    }
+
+    static updateBlog(params : BlogUdateModel, id : string) {
+        const blogIndex : number = db.blogs.findIndex(b => b.id === id)
+        const blog: BlogType | null  = this.getBlogById(id)
+        if (!blog) {
+            return false
+        }
+        const updatedBlog : BlogType = {
+            ...blog,
+            name: params.name,
+            description: params.description,
+            websiteUrl: params.websiteUrl
+        }
+        db.blogs.splice(blogIndex,1,updatedBlog)
+        return true
     }
 }
