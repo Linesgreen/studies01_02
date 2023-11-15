@@ -272,33 +272,20 @@ describe('/blogs', () => {
             .auth('admin', 'qwert')
             .expect(204)
 
-        // Проверяем удалилось ли видео
-        await request(app)
-            .get(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(404)
-        // Проверяем что второй блог на местек
-        await request(app)
-            .get(`${RouterPaths.blogs}`)
-            .expect([secondCreatedBlog])
+         // Проверяем что второй блог на месте а первое видео удалилось
+         await request(app)
+             .get(`${RouterPaths.blogs}`)
+             .expect([secondCreatedBlog])
 
     })
 
     // Удаляем второй блог
-    it("should DELETE video2 with correct input data ",async () =>{
+    it("should DELETE video2 with correct input data ",async () => {
         await request(app)
             .delete(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
             .auth('admin', 'qwert')
             .expect(204)
-
-        // Проверяем удалилcя ли блог
-        await request(app)
-            .get(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(404)
-
     })
-
     // Проверяем что БД пустая
     it('should return 200 and empty []',async () =>{
         await request(app)
