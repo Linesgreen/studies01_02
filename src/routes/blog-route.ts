@@ -3,7 +3,7 @@ import {BlogRepository} from "../repositories/blog-repository";
 import {RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
 import {BlogCreateModel, BlogParams, BlogUdateModel, PostBlogReqBody} from "../types/blog/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import { blogPostValidation} from "../validators/blogsValidator";
+import {blogPostValidation, blogPutValidation} from "../validators/blogsValidator";
 import {BlogType} from "../types/blog/output";
 import {db} from "../db/db";
 
@@ -34,7 +34,7 @@ blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<Blo
 
 })
 
-blogRoute.put('/:id',(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res )=> {
+blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res )=> {
     const id : string = req.params.id;
     let {name, description, websiteUrl} : BlogUdateModel = req.body;
 
