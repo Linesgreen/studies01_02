@@ -34,12 +34,17 @@ blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<Blo
 
 })
 
-blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res )=> {
+blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res:Response )=> {
     const id : string = req.params.id;
     let {name, description, websiteUrl} : BlogUdateModel = req.body;
 
     const blogIndex : number = db.blogs.findIndex(b => b.id === id)
     const blog : BlogType = db.blogs[blogIndex]
+
+    if(!blog) {
+         res.sendStatus(404)
+        return
+    }
 
     const updateItems : BlogType  = {
         ...blog,
