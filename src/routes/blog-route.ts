@@ -1,9 +1,9 @@
 import {Router, Response, Request} from "express";
 import {BlogRepository} from "../repositories/blog-repository";
-import {RequestWithBody, RequestWithParams} from "../types/common";
-import {BlogCreateModel, BlogParams, PostBlogReqBody} from "../types/blog/input";
+import {RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
+import {BlogCreateModel, BlogParams, BlogUdateModel, PostBlogReqBody} from "../types/blog/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import {blogIdValidation, blogPostValidation} from "../validators/blogsValidator";
+import { blogPostValidation} from "../validators/blogsValidator";
 import {BlogType} from "../types/blog/output";
 import {db} from "../db/db";
 
@@ -34,4 +34,21 @@ blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<Blo
 
 })
 
+blogRoute.put('/:id',(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res )=> {
+    const id : string = req.params.id;
+    let {name, description, websiteUrl} : BlogUdateModel = req.body;
 
+    const blogIndex : number = db.blogs.findIndex(b => b.id === id)
+    const blog : BlogType = db.blogs[blogIndex]
+
+    const updateItems : BlogType  = {
+        ...blog,
+        name,
+        description,
+        websiteUrl
+    }
+
+    db.blogs.splice(blogIndex,1,updateItems)
+    res.sendStatus(204)
+
+})

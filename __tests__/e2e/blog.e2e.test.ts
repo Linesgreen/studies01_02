@@ -6,9 +6,10 @@ import {app} from "../../src"
 
 import {VideoCreateModel} from "../../src/model/VideosCreateModels";
 import {VideoType} from "../../src/types/videos/output";
+import {BlogCreateModel} from "../../src/types/blog/input";
 
 
-describe('/videos', () => {
+describe('/blogs', () => {
     // Очищаем БД
     beforeAll(async ()=>{
         await request(app)
@@ -23,45 +24,56 @@ describe('/videos', () => {
     })
 
     // Проверка на несуществующее видео
-    it('should return 404 for not existing videos',async () =>{
+    it('should return 404 for not existing blogs',async () =>{
         await request(app)
             .get(`${RouterPaths.videos}/-100`)
             .expect(404)
     })
 
     // Пытаемся создать видео с неправильными данными
-    it("should'nt create blog with incorrect input data ",async () =>{
-        const videoData : VideoCreateModel  = {
-            title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
-            author: "aaaaaaaaaaaaaaaaaaa21",
-            availableResolutions: [
-                "616"
-            ],
-
+    it("should'nt create blog with incorrect input data ",async () => {
+        const blogData: BlogCreateModel = {
+            "name": "VladVladVladVladVladVladVladVladVlad",
+            "description": "",
+            "websiteUrl": "http://u.V8.Uczo7ucUynryp3l4zB5yoTlh4r_dsnD64jxyV4QNbF0beDg.tVoEyvnH0b-hskhI9vp-J-gVZEwtS1q5_imLfQ"
         };
+
+        //Отсылаем неправильнные данные
         await request(app)
-            .post(RouterPaths.videos)
-            .send(videoData)
+            .post(RouterPaths.blogs)
+            .auth('admin', 'qwert')
+            .send(blogData)
             .expect(400, {
-                "errorsMessages": [
+                "errorMessages": [
                     {
-                        message: "Invalid title",
-                        field: "title"
+                        "message": "Incorrect name",
+                        "field": "name"
                     },
                     {
-                        message: "Invalid author",
-                        field: "author"
+                        "message": "Incorrect description",
+                        "field": "description"
                     },
                     {
-                        message: "Invalid availableResolutions",
-                        field: "availableResolutions"
+                        "message": "Incorrect websiteUrl",
+                        "field": "websiteUrl"
                     }
                 ]
             })
-        await request(app)
-            .get(RouterPaths.videos)
-            .expect(200, [])
     })
+
+    it("should'nt create blog without login and pass ",async () => {
+
+        //Не проходим проверку логина и пароля
+        await request(app)
+            .post(RouterPaths.blogs)
+            .auth('aaaa', 'qwert')
+            .expect(401, "Unauthorized")
+    })
+
+
+
+
+
 
     //Переменные для хранения данных созданных видео
     let createdVideo : VideoType;

@@ -13,3 +13,9 @@ export type BlogCreateModel ={
     description: string,
     websiteUrl:string
 }
+
+export type BlogUdateModel = {
+    name: string,
+    description: string,
+    websiteUrl:string
+}
