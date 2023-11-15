@@ -27,11 +27,11 @@ export const websiteUrlValidation = body('websiteUrl')
 export const blogIdValidation = body('BlogId').isString().trim().custom((value) => {
     const blog = BlogRepository.getBlogById(value)
     if (!blog) {
-        throw new Error('Incorrect blogId!')
-
+        // throw new Error('Incorrect blogId!')
+        return false
     }
     return true
 }).withMessage('Incorrect blogId!')
 
 export const blogPostValidation = () => [nameValidation, descriptionValidation,websiteUrlValidation, inputModelValidation];
-export const blogPutValidation = () => [blogIdValidation,nameValidation, descriptionValidation,websiteUrlValidation, inputModelValidation];
+export const blogPutValidation = () => [nameValidation, descriptionValidation,websiteUrlValidation, inputModelValidation];
