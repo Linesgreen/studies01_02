@@ -7,6 +7,7 @@ import {app} from "../../src"
 import {VideoCreateModel} from "../../src/model/VideosCreateModels";
 import {VideoType} from "../../src/types/videos/output";
 import {BlogCreateModel} from "../../src/types/blog/input";
+import {BlogType} from "../../src/types/blog/output";
 
 
 describe('/blogs', () => {
@@ -22,15 +23,13 @@ describe('/blogs', () => {
             .get(RouterPaths.blogs)
             .expect(200, [])
     })
-
-    // Проверка на несуществующее видео
+    // Проверка на несуществующий блог
     it('should return 404 for not existing blogs',async () =>{
         await request(app)
             .get(`${RouterPaths.videos}/-100`)
             .expect(404)
     })
-
-    // Пытаемся создать видео с неправильными данными
+    // Пытаемся создать блог с неправильными данными
     it("should'nt create blog with incorrect input data ",async () => {
         const blogData: BlogCreateModel = {
             "name": "VladVladVladVladVladVladVladVladVlad",
@@ -60,10 +59,8 @@ describe('/blogs', () => {
                 ]
             })
     })
-
+    //Не проходим проверку логина и пароля
     it("should'nt create blog without login and pass ",async () => {
-
-        //Не проходим проверку логина и пароля
         await request(app)
             .post(RouterPaths.blogs)
             .auth('aaaa', 'qwert')
@@ -71,235 +68,233 @@ describe('/blogs', () => {
     })
 
 
-
-
-
-
     //Переменные для хранения данных созданных видео
-    let createdVideo : VideoType;
-    let secondCreatedVideo : VideoType;
+    let createdBlog : BlogType
+    let secondCreatedBlog : BlogType;
+    const blogData: BlogCreateModel = {
+        name: "Felix",
+        description: "Secret",
+        websiteUrl: "https://iaWvPbi4nnt1cAej2P1InTA.XtfqLdbJEXn29s9xpDzU762y._qXDYoZFu-TSCTCLhfR.RyF-B3dMemIrQ.INbBcnB3u"
+    }
+    const wrongBlogData: BlogCreateModel = {
+        name: "SecretSecretSecretSecretSecretSecretSecretSecretSecretSecretSecret",
+        description: "",
+        websiteUrl: "http://iaWvPbi4nnt1cAej2P1InTA.XtfqLdbJEXn29s9xpDzU762y._qXDYoZFu-TSCTCLhfR.RyF-B3dMemIrQ.INbBcnB3u"
+    }
 
-    // Создаем видео
-    it("should CREATE video with correct input data ",async () =>{
-        const videoData : VideoCreateModel  = {
-            title: "test",
-            author: "Vlad",
-            availableResolutions: [
-                "P1440"
-            ]
-        };
+    // Создаем блог
+    it("should CREATE blog with correct input data ",async () =>{
         const createResponse = await request(app)
-            .post(RouterPaths.videos)
-            .send(videoData)
-            .expect(201)
-        //Проверяем что созданное видео соответствует видео
-        createdVideo =  createResponse.body;
-        expect(createdVideo).toEqual({
-            id: expect.any(Number),
-            title: "test",
-            author: "Vlad",
-            canBeDownloaded: false,
-            minAgeRestriction: null,
-            createdAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
-            publicationDate: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
-            availableResolutions: [
-                "P1440"
-            ]
-        })
-
-        await request(app)
-            .get(RouterPaths.videos)
-            .expect(200, [createdVideo])
-    })
-
-    // Создаем второе видео
-    it("should CREATE video2 with correct input data ",async () =>{
-        const videoData : VideoCreateModel = {
-            title: "test2",
-            author: "VladDalv",
-            availableResolutions: [
-                "P1440"
-            ]
-        };
-        const createResponse = await request(app)
-            .post(RouterPaths.videos)
-            .send(videoData)
+            .post(RouterPaths.blogs)
+            .auth('admin', 'qwert')
+            .send(blogData)
             .expect(201)
 
-        //Проверяем что созданное видео соответствует второму видео
-        secondCreatedVideo =  createResponse.body;
-        expect(secondCreatedVideo).toEqual({
-            id: expect.any(Number),
-            title: "test2",
-            author: "VladDalv",
-            canBeDownloaded: false,
-            minAgeRestriction: null,
-            createdAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
-            publicationDate: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
-            availableResolutions: [
-                "P1440"
-            ]
+        //Проверяем что созданный блог соответствует заданным параметрам
+        createdBlog =  createResponse.body;
+        expect(createdBlog).toEqual({
+            id: expect.any(String),
+            name: "Felix",
+            description: "Secret",
+            websiteUrl: "https://iaWvPbi4nnt1cAej2P1InTA.XtfqLdbJEXn29s9xpDzU762y._qXDYoZFu-TSCTCLhfR.RyF-B3dMemIrQ.INbBcnB3u"
         })
 
+        //Проверяем что создался только один блог
         await request(app)
-            .get(RouterPaths.videos)
-            .expect(200, [createdVideo, secondCreatedVideo])
+            .get(RouterPaths.blogs)
+            .expect(200, [createdBlog])
+    })
+    // Создаем второй блог
+    it("should CREATE blog with correct input data ",async () =>{
+        const createResponse = await request(app)
+            .post(RouterPaths.blogs)
+            .auth('admin', 'qwert')
+            .send(blogData)
+            .expect(201)
+
+        //Проверяем что созданный блог соответствует заданным параметрам
+        secondCreatedBlog =  createResponse.body;
+        expect(secondCreatedBlog).toEqual({
+            id: expect.any(String),
+            name: "Felix",
+            description: "Secret",
+            websiteUrl: "https://iaWvPbi4nnt1cAej2P1InTA.XtfqLdbJEXn29s9xpDzU762y._qXDYoZFu-TSCTCLhfR.RyF-B3dMemIrQ.INbBcnB3u"
+        })
+
+        //Проверяем что в бд теперь два блога
+        await request(app)
+            .get(RouterPaths.blogs)
+            .expect(200, [createdBlog, secondCreatedBlog])
     })
 
-    // Пытаемся обновить createdVideo c неправильными данными
-    it("should'nt UPDATE video with incorrect input data ",async () =>{
+
+    //Пытаемся обновить createdBlog c неправильными данными
+    it("should'nt UPDATE video with incorrect input data ",async () => {
+        await request(app)
+            .put(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+            .auth('admin', 'qwert')
+            .send(wrongBlogData)
+            .expect(400, {
+                errorMessages: [
+                    {
+                        message: "Incorrect name",
+                        field: "name"
+                    },
+                    {
+                        message: "Incorrect description",
+                        field: "description"
+                    },
+                    {
+                        message: "Incorrect websiteUrl",
+                        field: "websiteUrl"
+                    }
+                ]
+            })
+
+        // Попытка обновить без логина и пароля
+        await request(app)
+            .put(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+            .auth('adminn', 'qwertn')
+            .send(wrongBlogData)
+            .expect(401, 'Unauthorized')
+
+        // Проверяем что блог не обновился
+        await request(app)
+            .get(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+            .auth('admin', 'qwert')
+            .expect(200, createdBlog)
+    })
+
+
+     // Пытаемя обновить secondCreatedBlog с неправильными данными
+    it("should'nt UPDATE video with incorrect input data ",async () => {
+        await request(app)
+            .put(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
+            .send(wrongBlogData)
+            .expect(400, {
+                errorMessages: [
+                    {
+                        message: "Incorrect name",
+                        field: "name"
+                    },
+                    {
+                        message: "Incorrect description",
+                        field: "description"
+                    },
+                    {
+                        message: "Incorrect websiteUrl",
+                        field: "websiteUrl"
+                    }
+                ]
+            })
+
+        // Попытка обновить без логина и пароля
+        await request(app)
+            .put(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('adminn', 'qwertn')
+            .send(wrongBlogData)
+            .expect(401, 'Unauthorized')
+
+        // Проверяем что блог не обновился
+        await request(app)
+            .get(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
+            .expect(200, createdBlog)
+    })
+
+
+
+
+    // Обновляем данные createdBlog
+     it("should UPDATE blog with correct input data ",async () =>{
          await request(app)
-            .put(`${RouterPaths.videos}/${createdVideo.id}`)
-            .send({
-                title: "",
-                author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
-                availableResolutions: [
-                    "P616"
-                ],
-                canBeDownloaded: "",
-                publicationDate:'lol'
-            })
-            .expect(400, {
-                "errorsMessages": [
-                    {
-                        message: "Invalid title",
-                        field: "title"
-                    },
-                    {
-                        message: "Invalid author",
-                        field: "author"
-                    },
-                    {
-                        message: "Invalid availableResolutions",
-                        field: "availableResolutions"
-                    },
-                    {
-                        message: "Invalid canBeDownloaded",
-                        field: "canBeDownloaded"
-                    },
-                    {
-                        message: "Invalid publicationDate",
-                        field: "publicationDate"
-                    }
-                ]
-            })
+             .put(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+             .auth('admin', 'qwert')
+             .send(blogData)
+             .expect(204)
 
+         // Проверяем что первый блог изменился
+         await request(app)
+             .get(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+             .auth('admin', 'qwert')
+             .expect(200, {
+                 ...createdBlog,
+                 ...blogData
+             })
 
+         // Проверяем что  первый блог изменился
+         await request(app)
+             .get(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+             .auth('admin', 'qwert')
+             .expect(200, createdBlog)
+
+         // Обновляем запись с первым блогом
+         createdBlog = {
+             ...createdBlog,
+             ...blogData
+         }
+     })
+     // Обновляем данные второго блога
+    it("should UPDATE blog with correct input data ",async () =>{
         await request(app)
-            .get(`${RouterPaths.videos}/${createdVideo.id}`)
-            .expect(200, createdVideo)
-
-    })
-    // Пытаемя обновить secondCreatedVideo с неправильными данными
-    it("should'nt UPDATE video2 with incorrect input data ",async () =>{
-        const videoData : VideoCreateModel = {
-            title: "",
-            author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
-            availableResolutions: [
-                "P616"
-            ]
-        };
-        await request(app)
-            .put(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
-            .send(videoData)
-            .expect(400, {
-                errorsMessages: [
-                    { message: 'Invalid title', field: 'title' },
-                    { message: 'Invalid author', field: 'author' },
-                    {
-                        message: 'Invalid availableResolutions',
-                        field: 'availableResolutions'
-                    }
-                ]
-            })
-
-        await request(app)
-            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
-            .expect(200, secondCreatedVideo)
-
-    })
-
-    // Обновляем данные createdVideo
-    it("should UPDATE video with correct input data ",async () =>{
-        const videoData : VideoCreateModel  = {
-            title: "update video",
-            author: ":)",
-            availableResolutions: [
-                "P1440"
-            ]
-        };
-        await request(app)
-            .put(`${RouterPaths.videos}/${createdVideo.id}`)
-            .send(videoData)
-            .expect(204)
-        // Проверяем что первый курс сreatedVideo изменился
-        await request(app)
-            .get(`${RouterPaths.videos}/${createdVideo.id}`)
-            .expect(200, {
-                ...createdVideo,
-                ...videoData
-            })
-
-        // Проверяем что  secondCreatedVideo не изменилось
-        await request(app)
-            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
-            .expect(200, secondCreatedVideo)
-
-        // Обновляем запись с первым видео
-        createdVideo = {
-            ...createdVideo,
-            ...videoData
-        }
-    })
-    // Обновляем данные secondCreatedVideo
-    it("should UPDATE video2 with correct input data ",async () =>{
-        const videoData : VideoCreateModel = {
-            title: "update video2",
-            author: ":З",
-            availableResolutions: [
-                "P144"
-            ]
-        };
-        await request(app)
-            .put(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
-            .send(videoData)
+            .put(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
+            .send(blogData)
             .expect(204)
 
+        // Проверяем что первый блог изменился
         await request(app)
-            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
+            .get(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
             .expect(200, {
-                ...secondCreatedVideo,
-                ...videoData
+                ...secondCreatedBlog,
+                ...blogData
             })
-        // Обновляем запись с вторым видео
-        secondCreatedVideo  = {
-            ...secondCreatedVideo,
-            ...videoData
-        }
 
+        // Проверяем что  первый блог изменился
+        await request(app)
+            .get(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
+            .expect(200, secondCreatedBlog)
+
+        // Обновляем запись с первым блогом
+        secondCreatedBlog = {
+            ...secondCreatedBlog,
+            ...blogData
+        }
     })
 
-    // Удаляем createdVideo
-    it("should DELETE video with correct input data ",async () =>{
+    // Удаляем createdBlog
+    it("should DELETE blog with correct id ",async () =>{
         await request(app)
-            .delete(`${RouterPaths.videos}/${createdVideo.id}`)
+            .delete(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+            .auth('admin', 'qwert')
             .expect(204)
 
         // Проверяем удалилось ли видео
         await request(app)
-            .get(`${RouterPaths.videos}/${createdVideo.id}`)
+            .get(`${RouterPaths.blogs}/${encodeURIComponent(createdBlog.id)}`)
+            .auth('admin', 'qwert')
             .expect(404)
+        // Проверяем что второй блог на местек
+        await request(app)
+            .get(`${RouterPaths.blogs}`)
+            .expect([secondCreatedBlog])
 
     })
-    // Удаляем secondCreatedVideo
+
+    // Удаляем второй блог
     it("should DELETE video2 with correct input data ",async () =>{
         await request(app)
-            .delete(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
+            .delete(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
             .expect(204)
 
-        // Проверяем удалилось ли видео
+        // Проверяем удалилcя ли блог
         await request(app)
-            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
+            .get(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
+            .auth('admin', 'qwert')
             .expect(404)
 
     })
@@ -307,9 +302,10 @@ describe('/blogs', () => {
     // Проверяем что БД пустая
     it('should return 200 and empty []',async () =>{
         await request(app)
-            .get(RouterPaths.videos)
+            .get(RouterPaths.blogs)
             .expect(200, [])
     })
+
 })
 
 

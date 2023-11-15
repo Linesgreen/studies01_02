@@ -37,6 +37,6 @@ blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAnd
 
 blogRoute.delete('/:id', authMiddleware,(req:RequestWithParams<BlogParams>, res:Response ) => {
     const id  = req.params.id
-    const blog = BlogRepository.getBlogById(id)
-    blog? res.send(blog) : res.sendStatus(404)
+    const deleteResult = BlogRepository.deleteBlogById(id)
+    return deleteResult ? res.sendStatus(204) : res.sendStatus(404)
 })
