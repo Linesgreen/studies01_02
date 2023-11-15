@@ -21,19 +21,12 @@ blogRoute.get('/:id', authMiddleware,(req:RequestWithParams<BlogParams>, res:Res
 
 blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<BlogCreateModel>, res:Response ) => {
     let {name, description, websiteUrl} : PostBlogReqBody = req.body;
-
-    const newBlog : BlogType = {
-        id: (new Date()).toString(),
-        name: name,
-        description: description,
-        websiteUrl: websiteUrl
-    }
-
-    db.blogs.push(newBlog)
-    res.status(201).send(newBlog)
+    const newBlogId : string =BlogRepository.addBlog({name, description, websiteUrl})
+    res.status(201).send(BlogRepository.getBlogById(newBlogId))
 
 })
 
+//////////////////////////////
 blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res:Response )=> {
     const id : string = req.params.id;
     let {name, description, websiteUrl} : BlogUdateModel = req.body;
@@ -56,4 +49,10 @@ blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAnd
     db.blogs.splice(blogIndex,1,updateItems)
     res.sendStatus(204)
 
+})
+
+blogRoute.delete('/:id', authMiddleware,(req:RequestWithParams<BlogParams>, res:Response ) => {
+    const id  = req.params.id
+    const blog = BlogRepository.getBlogById(id)
+    blog? res.send(blog) : res.sendStatus(404)
 })
