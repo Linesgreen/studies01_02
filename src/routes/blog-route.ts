@@ -19,8 +19,8 @@ blogRoute.get('/:id',(req:RequestWithParams<BlogParams>, res:Response ) => {
 })
 
 blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<BlogCreateModel>, res:Response ) => {
-    let {name, description, websiteUrl} : PostBlogReqBody = req.body;
-    const newBlogId : string = BlogRepository.addBlog({name, description, websiteUrl})
+    let {nam, description, websiteUrl} : PostBlogReqBody = req.body;
+    const newBlogId : string = BlogRepository.addBlog({nam, description, websiteUrl})
     res.status(201).send(BlogRepository.getBlogById(newBlogId))
 
 })
