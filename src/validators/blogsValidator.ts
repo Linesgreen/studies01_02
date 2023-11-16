@@ -8,6 +8,8 @@ export const nameValidation = body('name')
                                         .isLength({min: 1, max: 15})
                                         .withMessage('Incorrect name')
 
+
+
 export const descriptionValidation = body('description')
     .isString()
     .trim()
