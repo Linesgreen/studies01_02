@@ -15,7 +15,7 @@ export class BlogRepository {
     static addBlog (params : PostBlogReqBody) {
         const newBlog : BlogType = {
             id: (new Date()).toString(),
-            name: params.name,
+            name: params.nam,
             description: params.description,
             websiteUrl: params.websiteUrl
         }
