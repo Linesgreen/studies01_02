@@ -25,7 +25,7 @@ export class PostRepository {
 
 
         const newPost : PostType = {
-            id: `PostID_${(new Date()).toString()}`,
+            id: `PostID_${(new Date()).toISOString()}`,
             title: params.title,
             shortDescription: params.shortDescription,
             content: params.content,

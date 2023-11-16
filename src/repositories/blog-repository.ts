@@ -14,7 +14,7 @@ export class BlogRepository {
 
     static addBlog (params : PostBlogReqBody) {
         const newBlog : BlogType = {
-            id: (new Date()).toString(),
+            id: (new Date()).toISOString(),
             name: params.name,
             description: params.description,
             websiteUrl: params.websiteUrl
@@ -41,7 +41,7 @@ export class BlogRepository {
         return true
     }
 
-    static deleteBlogById(id : string) {
+    static deleteBlogById(id : string) : boolean {
         const blogIndex : number = db.blogs.findIndex(b => b.id === id)
         if (blogIndex === -1) {
             return false
