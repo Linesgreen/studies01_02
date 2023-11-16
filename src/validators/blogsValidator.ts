@@ -2,7 +2,7 @@ import {body} from "express-validator";
 import {inputModelValidation} from "../middlewares/inputModel/input-model-Validation";
 import {BlogRepository} from "../repositories/blog-repository";
 
-export const nameValidation = body('name')
+export const nameValidation = body('nam')
                                         .isString()
                                         .trim()
                                         .isLength({min: 1, max: 15})
