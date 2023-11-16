@@ -23,12 +23,14 @@ describe('/blogs', () => {
             .get(RouterPaths.blogs)
             .expect(200, [])
     })
+
     // Проверка на несуществующий блог
     it('should return 404 for not existing blogs',async () =>{
         await request(app)
-            .get(`${RouterPaths.videos}/-100`)
+            .get(`${RouterPaths.blogs}/-100`)
             .expect(404)
     })
+
     // Пытаемся создать блог с неправильными данными
     it("should'nt create blog with incorrect input data ",async () => {
         const blogData: BlogCreateModel = {
@@ -43,22 +45,14 @@ describe('/blogs', () => {
             .auth('admin', 'qwert')
             .send(blogData)
             .expect(400, {
-                "errorMessages": [
-                    {
-                        "message": "Incorrect name",
-                        "field": "name"
-                    },
-                    {
-                        "message": "Incorrect description",
-                        "field": "description"
-                    },
-                    {
-                        "message": "Incorrect websiteUrl",
-                        "field": "websiteUrl"
-                    }
+                errorsMessages: [
+                    { message: 'Incorrect websiteUrl', field: 'websiteUrl' },
+                    { message: 'Incorrect description', field: 'description' },
+                    { message: 'Incorrect name', field: 'name' }
                 ]
             })
     })
+
     //Не проходим проверку логина и пароля
     it("should'nt create blog without login and pass ",async () => {
         await request(app)
@@ -127,7 +121,6 @@ describe('/blogs', () => {
             .expect(200, [createdBlog, secondCreatedBlog])
     })
 
-
     //Пытаемся обновить createdBlog c неправильными данными
     it("should'nt UPDATE video with incorrect input data ",async () => {
         await request(app)
@@ -135,19 +128,10 @@ describe('/blogs', () => {
             .auth('admin', 'qwert')
             .send(wrongBlogData)
             .expect(400, {
-                errorMessages: [
-                    {
-                        message: "Incorrect name",
-                        field: "name"
-                    },
-                    {
-                        message: "Incorrect description",
-                        field: "description"
-                    },
-                    {
-                        message: "Incorrect websiteUrl",
-                        field: "websiteUrl"
-                    }
+                errorsMessages: [
+                    { message: 'Incorrect websiteUrl', field: 'websiteUrl' },
+                    { message: 'Incorrect description', field: 'description' },
+                    { message: 'Incorrect name', field: 'name' }
                 ]
             })
 
@@ -164,8 +148,6 @@ describe('/blogs', () => {
             .auth('admin', 'qwert')
             .expect(200, createdBlog)
     })
-
-
      // Пытаемя обновить secondCreatedBlog с неправильными данными
     it("should'nt UPDATE video with incorrect input data ",async () => {
         await request(app)
@@ -173,19 +155,10 @@ describe('/blogs', () => {
             .auth('admin', 'qwert')
             .send(wrongBlogData)
             .expect(400, {
-                errorMessages: [
-                    {
-                        message: "Incorrect name",
-                        field: "name"
-                    },
-                    {
-                        message: "Incorrect description",
-                        field: "description"
-                    },
-                    {
-                        message: "Incorrect websiteUrl",
-                        field: "websiteUrl"
-                    }
+                errorsMessages: [
+                    { message: 'Incorrect websiteUrl', field: 'websiteUrl' },
+                    { message: 'Incorrect description', field: 'description' },
+                    { message: 'Incorrect name', field: 'name' }
                 ]
             })
 
@@ -200,11 +173,8 @@ describe('/blogs', () => {
         await request(app)
             .get(`${RouterPaths.blogs}/${encodeURIComponent(secondCreatedBlog.id)}`)
             .auth('admin', 'qwert')
-            .expect(200, createdBlog)
+            .expect(200, secondCreatedBlog)
     })
-
-
-
 
     // Обновляем данные createdBlog
      it("should UPDATE blog with correct input data ",async () =>{
@@ -278,7 +248,6 @@ describe('/blogs', () => {
              .expect([secondCreatedBlog])
 
     })
-
     // Удаляем второй блог
     it("should DELETE video2 with correct input data ",async () => {
         await request(app)
@@ -286,6 +255,7 @@ describe('/blogs', () => {
             .auth('admin', 'qwert')
             .expect(204)
     })
+
     // Проверяем что БД пустая
     it('should return 200 and empty []',async () =>{
         await request(app)

@@ -18,6 +18,7 @@ export const videoRouter = Router ({});
 export const RouterPaths = {
     videos : '/videos',
     blogs: '/blogs',
+    posts: '/posts',
     __test__ : '/testing/all-data'
 }
 function validationReqBody (reqParams : string, maxLength : number) : boolean {
