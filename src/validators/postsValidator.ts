@@ -14,7 +14,7 @@ export const shortDescriptionValidation = body('shortDescription')
     .isLength({min: 1, max: 100})
     .withMessage('Incorrect shortDescription')
 
-export const contentValidation = body(' content')
+export const contentValidation = body('content')
     .isString()
     .trim()
     .isLength({min: 1, max: 1000})
