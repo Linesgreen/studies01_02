@@ -7,16 +7,13 @@ export class BlogRepository {
         return db.blogs
     }
 
-    static getBlogById (id : string) {
-        const blog = db.blogs.find(b => b.id === id)
-        if (!blog) {
-            return null
-        }
-        return blog
+    static getBlogById (id : string)  {
+        const blog : BlogType | undefined = db.blogs.find(b => b.id === id)
+        return blog || null
     }
 
     static addBlog (params : PostBlogReqBody) {
-        let newBlog : BlogType = {
+        const newBlog : BlogType = {
             id: (new Date()).toString(),
             name: params.name,
             description: params.description,

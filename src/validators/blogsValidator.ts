@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {inputModelValidation} from "../middlewares/inputModel/input-model-Validation";
 import {BlogRepository} from "../repositories/blog-repository";
 
@@ -27,8 +26,7 @@ export const websiteUrlValidation = body('websiteUrl')
 export const blogIdValidation = body('BlogId').isString().trim().custom((value) => {
     const blog = BlogRepository.getBlogById(value)
     if (!blog) {
-        // throw new Error('Incorrect blogId!')
-        return false
+        throw new Error('Incorrect blogId!')
     }
     return true
 }).withMessage('Incorrect blogId!')

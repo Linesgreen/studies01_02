@@ -5,17 +5,16 @@ import {BlogCreateModel, BlogParams, BlogUdateModel, PostBlogReqBody} from "../t
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogPostValidation, blogPutValidation} from "../validators/blogsValidator";
 import {BlogType} from "../types/blog/output";
-import {db} from "../db/db";
 
 export const blogRoute = Router ({})
 
 blogRoute.get('/', (req:Request, res:Response ) => {
-    const blogs = BlogRepository.getAllBlogs()
+    const blogs : BlogType[] = BlogRepository.getAllBlogs()
     res.send(blogs)
 })
 blogRoute.get('/:id', authMiddleware,(req:RequestWithParams<BlogParams>, res:Response ) => {
-    const id  = req.params.id
-    const blog = BlogRepository.getBlogById(id)
+    const id : string  = req.params.id
+    const blog : BlogType | null = BlogRepository.getBlogById(id)
     blog? res.send(blog) : res.sendStatus(404)
 })
 
@@ -26,7 +25,6 @@ blogRoute.post('/', authMiddleware,blogPostValidation(),(req:RequestWithBody<Blo
 
 })
 
-//////////////////////////////
 blogRoute.put('/:id',authMiddleware,blogPutValidation(),(req: RequestWithBodyAndParams<BlogParams, BlogUdateModel>, res:Response )=> {
     const id : string = req.params.id;
     const {name, description, websiteUrl} : BlogUdateModel = req.body;

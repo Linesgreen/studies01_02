@@ -1,9 +1,12 @@
 import {VideoType} from "../types/videos/output";
 import {BlogType} from "../types/blog/output";
+import {PostType} from "../types/posts/output";
+
 
 type DBtype = {
     videos: VideoType[]
     blogs : BlogType[]
+    posts : PostType[]
 }
 
 
@@ -22,10 +25,22 @@ export const db: DBtype = {
     }],
     blogs : [
         {
-            id: 'a',
-            name: "string",
-            description: "string",
-            websiteUrl: "string"
+            id: '01',
+            name: "FirstBlogName",
+            description: "FirstDescription",
+            websiteUrl: "FirstURL"
         }
+    ],
+    posts: [
+
+            {
+                id: "01",
+                title: "firstTitle",
+                shortDescription: "firstDescription",
+                content: "firstContent",
+                blogId: "firstBlogID",
+                blogName: "FirstBlogName"
+            }
+
     ]
 }
