@@ -23,7 +23,7 @@ export const websiteUrlValidation = body('websiteUrl')
 
 
 
-export const blogIdValidation = body('BlogId').isString().trim().custom((value) => {
+export const blogIdValidation = body('blogId').isString().trim().custom((value) => {
     const blog = BlogRepository.getBlogById(value)
     if (!blog) {
         throw new Error('Incorrect blogId!')
