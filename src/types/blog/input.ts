@@ -3,13 +3,13 @@ export type BlogParams = {
 }
 
 export type PostBlogReqBody = {
-    nam: string,
+    name: string,
     description: string,
     websiteUrl:string
 }
 
 export type BlogCreateModel ={
-    nam: string,
+    name: string,
     description: string,
     websiteUrl:string
 }
