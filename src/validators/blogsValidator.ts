@@ -33,5 +33,7 @@ export const blogIdValidation = body('blogId').isString().trim().custom((value) 
     return true
 }).withMessage('Incorrect blogId!')
 
-export const blogPostValidation = () => [nameValidation, descriptionValidation,websiteUrlValidation, inputModelValidation];
-export const blogPutValidation = () => [nameValidation, descriptionValidation,websiteUrlValidation, inputModelValidation];
+
+export const blogPostValidation = () => [websiteUrlValidation, descriptionValidation,nameValidation, inputModelValidation];
+
+export const blogPutValidation = () => [websiteUrlValidation, descriptionValidation,nameValidation, inputModelValidation];
