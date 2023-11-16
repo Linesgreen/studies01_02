@@ -20,6 +20,7 @@ app.get('/', (req : Request, res : Response) => {
 app.delete(RouterPaths.__test__, (req : Request, res : Response) => {
     db.videos.length = 0;
     db.blogs.length = 0;
+    db.posts.length=0;
     res.sendStatus(204);
 })
 
