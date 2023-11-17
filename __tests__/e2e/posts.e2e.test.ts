@@ -4,7 +4,6 @@ import {app} from "../../src";
 import {PostCreateModel} from "../../src/types/posts/input";
 import {BlogRepository} from "../../src/repositories/blog-repository";
 import {PostType} from "../../src/types/posts/output";
-import {PostRepository} from "../../src/repositories/post-repository";
 
 describe('/posts', () => {
     // Очищаем БД
@@ -94,10 +93,7 @@ describe('/posts', () => {
             blogId: blogDataID
         }
 
-
-
-
-        const createResponse = await request(app)
+        await request(app)
             .post(RouterPaths.posts)
             .auth('admin', 'qwert')
             .send(postData)
@@ -121,7 +117,7 @@ describe('/posts', () => {
 
     // Создаем второй пост
     it("should CREATE post with correct input data ",async () =>{
-        const createResponse = await request(app)
+        await request(app)
             .post(RouterPaths.posts)
             .auth('admin', 'qwert')
             .send(postData)
@@ -143,147 +139,90 @@ describe('/posts', () => {
     })})
 
 
-    /*
-    //Пытаемся обновить createdBlog c неправильными данными
-    it("should'nt UPDATE video with incorrect input data ",async () => {
+
+    //Пытаемся обновить первый пост с неправильными данными
+    it("should'nt UPDATE post with incorrect input data ",async () => {
         await request(app)
-            .put(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
+            .put(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
             .auth('admin', 'qwert')
-            .send(wrongBlogData)
+            .send(wrongPostData)
             .expect(400, {
                 errorsMessages: [
-                    { message: 'Incorrect websiteUrl', field: 'websiteUrl' },
-                    { message: 'Incorrect description', field: 'description' },
-                    { message: 'Incorrect name', field: 'name' }
+                    { message: 'Incorrect title', field: 'title' },
+                    {
+                        message: 'Incorrect shortDescription',
+                        field: 'shortDescription'
+                    },
+                    { message: 'Incorrect content', field: 'content' },
+                    { message: 'Incorrect blogId!', field: 'blogId' }
                 ]
             })
 
-        // Попытка обновить без логина и пароля
-        await request(app)
-            .put(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
-            .auth('adminn', 'qwertn')
-            .send(wrongBlogData)
-            .expect(401, 'Unauthorized')
+               // Попытка обновить без логина и пароля
+               await request(app)
+                   .put(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
+                   .auth('adminn', 'qwertn')
+                   .send(wrongPostData)
+                   .expect(401, 'Unauthorized')
 
-        // Проверяем что блог не обновился
+               // Проверяем что пост не обновился
+               await request(app)
+                   .get(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
+                   .auth('admin', 'qwert')
+                   .expect(200, createdPostData)
+           })
+
+
+    // Обновляем данные поста
+    it("should UPDATE post with correct input data ",async () =>{
         await request(app)
-            .get(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
+            .put(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
             .auth('admin', 'qwert')
-            .expect(200, createdBlog)
-    })
-    // Пытаемя обновить secondCreatedBlog с неправильными данными
-    it("should'nt UPDATE video with incorrect input data ",async () => {
-        await request(app)
-            .put(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .send(wrongBlogData)
-            .expect(400, {
-                errorsMessages: [
-                    { message: 'Incorrect websiteUrl', field: 'websiteUrl' },
-                    { message: 'Incorrect description', field: 'description' },
-                    { message: 'Incorrect name', field: 'name' }
-                ]
+            .send({
+                ...createdPostData,
+                ...postData,
+                title: 'Lolik',
             })
-
-        // Попытка обновить без логина и пароля
-        await request(app)
-            .put(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('adminn', 'qwertn')
-            .send(wrongBlogData)
-            .expect(401, 'Unauthorized')
-
-        // Проверяем что блог не обновился
-        await request(app)
-            .get(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(200, secondCreatedBlog)
-    })
-
-    // Обновляем данные createdBlog
-    it("should UPDATE blog with correct input data ",async () =>{
-        await request(app)
-            .put(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
-            .auth('admin', 'qwert')
-            .send(blogData)
             .expect(204)
 
-        // Проверяем что первый блог изменился
+        // Проверяем что первый пост изменился
         await request(app)
-            .get(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
+            .get(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
             .auth('admin', 'qwert')
             .expect(200, {
-                ...createdBlog,
-                ...blogData
+                ...createdPostData,
+                ...postData,
+                title:'Lolik'
             })
 
-        // Проверяем что  первый блог изменился
-        await request(app)
-            .get(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(200, createdBlog)
-
-        // Обновляем запись с первым блогом
-        createdBlog = {
-            ...createdBlog,
-            ...blogData
-        }
-    })
-    // Обновляем данные второго блога
-    it("should UPDATE blog with correct input data ",async () =>{
-        await request(app)
-            .put(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .send(blogData)
-            .expect(204)
-
-        // Проверяем что первый блог изменился
-        await request(app)
-            .get(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(200, {
-                ...secondCreatedBlog,
-                ...blogData
-            })
-
-        // Проверяем что  первый блог изменился
-        await request(app)
-            .get(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(200, secondCreatedBlog)
-
-        // Обновляем запись с первым блогом
-        secondCreatedBlog = {
-            ...secondCreatedBlog,
-            ...blogData
-        }
     })
 
-    // Удаляем createdBlog
-    it("should DELETE blog with correct id ",async () =>{
-        await request(app)
-            .delete(`${RouterPaths.posts}/${encodeURIComponent(createdBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(204)
+// Удаляем пост
+it("should DELETE blog with correct id ",async () =>{
+    await request(app)
+        .delete(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
+        .auth('admin', 'qwert')
+        .expect(204)
 
-        // Проверяем что второй блог на месте а первое видео удалилось
-        await request(app)
-            .get(`${RouterPaths.posts}`)
-            .expect([secondCreatedBlog])
+    // Проверяем что второй блог на месте а первое видео удалилось
+    await request(app)
+        .get(`${RouterPaths.posts}`)
+        .expect([secondCreatedPost])
 
-    })
-    // Удаляем второй блог
-    it("should DELETE video2 with correct input data ",async () => {
-        await request(app)
-            .delete(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedBlog.id)}`)
-            .auth('admin', 'qwert')
-            .expect(204)
-    })
+})
 
-    // Проверяем что БД пустая
-    it('should return 200 and empty []',async () =>{
-        await request(app)
-            .get(RouterPaths.posts)
-            .expect(200, [])
-    })
-*/
+// Удаляем второй блог
+it("should DELETE video2 with correct input data ",async () => {
+    await request(app)
+        .delete(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedPost.id)}`)
+        .auth('admin', 'qwert')
+        .expect(204)
+})
+
+// Проверяем что БД пустая
+it('should return 200 and empty []',async () =>{
+    await request(app)
+        .get(RouterPaths.posts)
+        .expect(200, [])
+})
 })
