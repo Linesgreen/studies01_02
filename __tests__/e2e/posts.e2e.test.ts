@@ -1,6 +1,5 @@
-import {RouterPaths} from "../../src/routes/videos-router";
 import request from "supertest";
-import {app} from "../../src";
+import {app, RouterPaths} from "../../src";
 import {PostCreateModel} from "../../src/types/posts/input";
 import {BlogRepository} from "../../src/repositories/blog-repository";
 import {PostType} from "../../src/types/posts/output";

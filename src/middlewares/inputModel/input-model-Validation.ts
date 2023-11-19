@@ -7,7 +7,8 @@ export const inputModelValidation = (req: Request,res: Response , next : NextFun
             case 'field' :
                 return {
                     message : error.msg,
-                    field: error.path
+                    field: error.path,
+
                 }
             default: return {
                 message : error.msg,

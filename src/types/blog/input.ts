@@ -14,7 +14,7 @@ export type BlogCreateModel ={
     websiteUrl:string
 }
 
-export type BlogUdateModel = {
+export type BlogUpdateModel = {
     name: string,
     description: string,
     websiteUrl:string

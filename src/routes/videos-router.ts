@@ -1,6 +1,8 @@
-import express, {Request, Response, Router} from "express";
+import {Request, Response, Router} from "express";
 import {
-    ErrorMessagesType, ErrorType, PostReqBody,
+    ErrorMessagesType,
+    ErrorType,
+    PostReqBody,
     RequestWithBody,
     RequestWithBodyAndParams,
     RequestWithParams,
@@ -15,12 +17,6 @@ import {db} from "../db/db";
 import {AvailableResolutions, VideoType} from "../types/videos/output";
 
 export const videoRouter = Router ({});
-export const RouterPaths = {
-    videos : '/videos',
-    blogs: '/blogs',
-    posts: '/posts',
-    __test__ : '/testing/all-data'
-}
 function validationReqBody (reqParams : string, maxLength : number) : boolean {
     return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < maxLength &&  reqParams.trim().length >= 1
 }

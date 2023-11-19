@@ -1,6 +1,6 @@
 import {body} from "express-validator";
-import {inputModelValidation} from "../middlewares/inputModel/input-model-Validation";
-import {BlogRepository} from "../repositories/blog-repository";
+import {inputModelValidation} from "../inputModel/input-model-Validation";
+import {BlogRepository} from "../../repositories/blog-repository";
 
 export const nameValidation = body('name')
                                         .isString()

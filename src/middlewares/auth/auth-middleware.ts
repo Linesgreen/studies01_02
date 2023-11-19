@@ -4,7 +4,7 @@ const login = "admin" ;
 const password = "qwerty";
 
 export const authMiddleware = (req : Request,res : Response,next : NextFunction) => {
-    const auth = req.headers['authorization']
+    const auth : string | undefined = req.headers['authorization']
 
     if (!auth) {
         res.sendStatus(401)

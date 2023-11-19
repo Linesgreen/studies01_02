@@ -10,8 +10,6 @@ export type ErrorMessagesType = {
     message: string
     field: string
 }
-
-
 export type PostReqBody = {
     title : string,
     author : string,

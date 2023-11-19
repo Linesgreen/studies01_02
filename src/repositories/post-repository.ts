@@ -14,7 +14,7 @@ export class PostRepository {
          return post || null
     }
 
-    static addPost (params : PostCreateModel) {
+    static addPost (params : PostCreateModel) : string {
         const blog : BlogType | null  = BlogRepository.getBlogById(params.blogId)
 
         // попытка успокоить TS
@@ -37,7 +37,7 @@ export class PostRepository {
         return newPost.id
     }
 
-    static updatePost(params: PostUpdateModel, id :string) {
+    static updatePost(params: PostUpdateModel, id :string) : boolean {
         const postIndex : number = db.posts.findIndex(p => p.id === id)
         const post : PostType | null = this.getPostById(id)
         if (!post) {

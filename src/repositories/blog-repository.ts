@@ -1,18 +1,18 @@
 import {db} from "../db/db";
-import {BlogUdateModel, PostBlogReqBody} from "../types/blog/input";
+import {BlogUpdateModel, PostBlogReqBody} from "../types/blog/input";
 import {BlogType} from "../types/blog/output";
 
 export class BlogRepository {
-    static getAllBlogs() {
+    static getAllBlogs() : BlogType[] {
         return db.blogs
     }
 
-    static getBlogById (id : string)  {
+    static getBlogById (id : string) : BlogType | null  {
         const blog : BlogType | undefined = db.blogs.find(b => b.id === id)
         return blog || null
     }
 
-    static addBlog (params : PostBlogReqBody) {
+    static addBlog (params : PostBlogReqBody) : string {
         const newBlog : BlogType = {
             id: (new Date()).toISOString(),
             name: params.name,
@@ -25,7 +25,7 @@ export class BlogRepository {
 
 
     // успех true, не успех false
-    static updateBlog(params : BlogUdateModel, id : string) {
+    static updateBlog(params : BlogUpdateModel, id : string) : boolean {
         const blogIndex : number = db.blogs.findIndex(b => b.id === id)
         const blog: BlogType | null  = this.getBlogById(id)
         if (!blog) {
