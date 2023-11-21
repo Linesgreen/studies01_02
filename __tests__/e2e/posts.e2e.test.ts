@@ -39,7 +39,7 @@ describe('/posts', () => {
         //Отсылаем неправильнные данные
         await request(app)
             .post(RouterPaths.posts)
-            .auth('admin', 'qwert')
+            .auth('admin', 'qwerty')
             .send(wrongPostData)
             .expect(400, {
                 errorsMessages: [
@@ -94,7 +94,7 @@ describe('/posts', () => {
 
         await request(app)
             .post(RouterPaths.posts)
-            .auth('admin', 'qwert')
+            .auth('admin', 'qwerty')
             .send(postData)
             .expect(201)
             .then(response => {
@@ -118,7 +118,7 @@ describe('/posts', () => {
     it("should CREATE post with correct input data ",async () =>{
         await request(app)
             .post(RouterPaths.posts)
-            .auth('admin', 'qwert')
+            .auth('admin', 'qwerty')
             .send(postData)
             .expect(201)
             .then(response => {
@@ -143,7 +143,7 @@ describe('/posts', () => {
     it("should'nt UPDATE post with incorrect input data ",async () => {
         await request(app)
             .put(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
-            .auth('admin', 'qwert')
+            .auth('admin', 'qwerty')
             .send(wrongPostData)
             .expect(400, {
                 errorsMessages: [
@@ -167,7 +167,7 @@ describe('/posts', () => {
                // Проверяем что пост не обновился
                await request(app)
                    .get(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
-                   .auth('admin', 'qwert')
+                   .auth('admin', 'qwerty')
                    .expect(200, createdPostData)
            })
 
@@ -176,7 +176,7 @@ describe('/posts', () => {
     it("should UPDATE post with correct input data ",async () =>{
         await request(app)
             .put(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
-            .auth('admin', 'qwert')
+            .auth('admin', 'qwerty')
             .send({
                 ...createdPostData,
                 ...postData,
@@ -187,7 +187,7 @@ describe('/posts', () => {
         // Проверяем что первый пост изменился
         await request(app)
             .get(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
-            .auth('admin', 'qwert')
+            .auth('admin', 'qwerty')
             .expect(200, {
                 ...createdPostData,
                 ...postData,
@@ -197,10 +197,10 @@ describe('/posts', () => {
     })
 
 // Удаляем пост
-it("should DELETE blog with correct id ",async () =>{
+it("should DELETE blogs with correct id ",async () =>{
     await request(app)
         .delete(`${RouterPaths.posts}/${encodeURIComponent(createdPostData.id)}`)
-        .auth('admin', 'qwert')
+        .auth('admin', 'qwerty')
         .expect(204)
 
     // Проверяем что второй блог на месте а первое видео удалилось
@@ -214,7 +214,7 @@ it("should DELETE blog with correct id ",async () =>{
 it("should DELETE video2 with correct input data ",async () => {
     await request(app)
         .delete(`${RouterPaths.posts}/${encodeURIComponent(secondCreatedPost.id)}`)
-        .auth('admin', 'qwert')
+        .auth('admin', 'qwerty')
         .expect(204)
 })
 

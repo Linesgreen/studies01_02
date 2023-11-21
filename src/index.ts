@@ -5,7 +5,7 @@ import {blogRoute} from "./routes/blog-route";
 import {postRoute} from "./routes/post.route";
 
 export const app  = express()
-const port = 3002;
+const port = 3005;
 
 export const RouterPaths = {
     videos: '/videos',

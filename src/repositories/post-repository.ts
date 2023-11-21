@@ -2,7 +2,7 @@ import {db} from "../db/db";
 import {PostType} from "../types/posts/output";
 import {PostCreateModel, PostParams, PostUpdateModel} from "../types/posts/input";
 import {BlogRepository} from "./blog-repository";
-import {BlogType} from "../types/blog/output";
+import {BlogType} from "../types/blogs/output";
 
 export class PostRepository {
     static getAllPosts() : PostType[] {
@@ -17,20 +17,13 @@ export class PostRepository {
     static addPost (params : PostCreateModel) : string {
         const blog : BlogType | null  = BlogRepository.getBlogById(params.blogId)
 
-        // попытка успокоить TS
-        if(!blog) {
-            return "ERROR"
-        }
-        /////////////////////////
-
-
         const newPost : PostType = {
             id: `PostID_${(new Date()).toISOString()}`,
             title: params.title,
             shortDescription: params.shortDescription,
             content: params.content,
             blogId: params.blogId,
-            blogName: blog.name
+            blogName: blog!.name
         }
 
         db.posts.push(newPost)

@@ -1,5 +1,5 @@
 import {VideoType} from "../types/videos/output";
-import {BlogType} from "../types/blog/output";
+import {BlogType} from "../types/blogs/output";
 import {PostType} from "../types/posts/output";
 
 

@@ -21,11 +21,11 @@ postRoute.get('/:id', (req : RequestWithParams<PostParams>, res: Response<PostTy
     post? res.send(post) : res.sendStatus(404)
 })
 
-/////////////////////////////////////
-postRoute.post('/', authMiddleware,postPostValidation(), (req : RequestWithBody<PostCreateModel>, res : Response<PostType | null>) => {
+
+postRoute.post('/', authMiddleware, postPostValidation(), (req : RequestWithBody<PostCreateModel>, res : Response<PostType>) => {
     let {title,shortDescription,content,blogId} : PostCreateModel = req.body
     const newPostId : string  = PostRepository.addPost({title,shortDescription,content,blogId})
-    res.status(201).send(PostRepository.getPostById(newPostId))
+    res.status(201).send(PostRepository.getPostById(newPostId)!)
 })
 
 postRoute.put('/:id',authMiddleware,postPutValidation(), (req : RequestWithBodyAndParams<PostParams, PostUpdateModel>, res:Response) => {

@@ -1,6 +1,6 @@
 import {db} from "../db/db";
-import {BlogUpdateModel, PostBlogReqBody} from "../types/blog/input";
-import {BlogType} from "../types/blog/output";
+import {BlogUpdateModel, PostBlogReqBody} from "../types/blogs/input";
+import {BlogType} from "../types/blogs/output";
 
 export class BlogRepository {
     static getAllBlogs() : BlogType[] {
